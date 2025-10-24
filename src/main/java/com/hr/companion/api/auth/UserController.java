@@ -37,7 +37,7 @@ public class UserController {
     })
     public ResponseEntity<ApiSuccessResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletResponse res) {
         authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        String accessToken = userDetailsService.authenticateUser(request.getUsername(), request.getPassword(), res);
+        String accessToken = userDetailsService.authenticateUser(request.getUsername(), res);
         return ResponseEntity.ok((ApiSuccessResponse.success(new LoginResponse(accessToken),
                 "User successfully authenticated", HttpStatus.OK.value())));
     }

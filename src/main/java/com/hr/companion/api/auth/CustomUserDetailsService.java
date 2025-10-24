@@ -33,10 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Authenticates a user by their username and password.
      * @param username The username of the user to authenticate.
-     * @param password The password of the user to authenticate.
      * @return A JWT token if authentication is successful.
      */
-    public String authenticateUser(String username, String password, HttpServletResponse res) {
+    public String authenticateUser(String username, HttpServletResponse res) {
         log.info("Authenticating user: {}", username);
         var user = loadUserByUsername(username);
         var accessToken = jwtService.generateAccessToken(user.getUsername(), user.getAuthorities());
