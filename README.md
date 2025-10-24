@@ -38,3 +38,7 @@ To get the project running:
 1. Run `docker-compose up -d` from the root of the project from a terminal window to start the local database
 2. Run the spring boot project as normal
 3. That's it!! You can start testing endpoints with postman or from a dedicated front end application
+
+# Swagger API Documentation
+
+To access and view the Swagger API documentation for My HR Companion, please use the endpoint `/swagger-ui/index.html` after starting the application. This will provide you with a comprehensive overview of all available API endpoints, their request and response formats, and other relevant details to help you interact with the API effectively.
