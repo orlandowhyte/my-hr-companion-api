@@ -3,6 +3,7 @@ package com.hr.companion.api.exception;
 import com.hr.companion.api.util.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
@@ -71,7 +72,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountExpiredException.class)
     public ResponseEntity<ApiErrorResponse> handleAccountExpired(
             AccountExpiredException ex, HttpServletRequest request) {
-        log.warn("Authentication failed: account expired");
+        log.error("Authentication failed: account expired");
         return buildResponse(
                 HttpStatus.FORBIDDEN,
                 "User account has expired",
@@ -83,7 +84,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CredentialsExpiredException.class)
     public ResponseEntity<ApiErrorResponse> handleCredentialsExpired(
             CredentialsExpiredException ex, HttpServletRequest request) {
-        log.warn("Authentication failed: credentials expired");
+        log.error("Authentication failed: credentials expired");
         return buildResponse(
                 HttpStatus.FORBIDDEN,
                 "User credentials have expired",
@@ -107,7 +108,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiErrorResponse> handleGenericAuthException(
             AuthenticationException ex, HttpServletRequest request) {
-        log.warn("Authentication failed: {}", ex.getMessage());
+        log.error("Authentication failed: {}", ex.getMessage());
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
                 "Authentication failed",
@@ -131,10 +132,22 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleUserExistsException(
             UserAlreadyExistsException ex, HttpServletRequest request) {
-        log.warn("User already exists: {}", ex.getMessage());
+        log.error("User already exists: {}", ex.getMessage());
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
                 "User already exists",
+                null,
+                request
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserDataViolationException(
+            DataIntegrityViolationException ex, HttpServletRequest request) {
+        log.error("There was a data integrity violation: {}", ex.getMessage());
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
                 null,
                 request
         );

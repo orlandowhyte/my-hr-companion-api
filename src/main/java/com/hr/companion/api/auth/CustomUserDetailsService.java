@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Service
@@ -71,8 +72,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Create user
         User newUser = User.builder()
                 .username(request.getUsername())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(encodedPassword)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .status("active")
                 .roles(roles)
                 .enabled(true)
                 .build();

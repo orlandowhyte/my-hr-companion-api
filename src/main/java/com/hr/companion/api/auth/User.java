@@ -6,8 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -18,29 +20,33 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class User implements UserDetails {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false, length = 100)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    @Column(name="user_name", unique = true, nullable = false, length = 100)
     private String username;
-
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(name="first_name", nullable = false, length = 100)
+    private String firstname;
+    @Column(name="last_name", nullable = false, length = 100)
+    private String lastname;
+    @Column(name="email_address", nullable = false, unique = true, length = 150)
     private String email;
-
     @Column(nullable = false)
     private String password;
-
     @Column(nullable = false)
     private boolean enabled = true;
-
+    @Column(nullable = false)
+    private String status;
+    @Column(name="created_at")
+    private Instant createdAt;
+    @Column(name="updated_at")
+    private Instant updatedAt;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id")
     )
-    @Column(name = "role")
+    @Column(name = "role_name")
     private Set<String> roles;
 
     @Override

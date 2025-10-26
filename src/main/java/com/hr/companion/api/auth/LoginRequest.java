@@ -4,15 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Schema(description = "Request object for user login")
 public class LoginRequest {
-    @Schema(description = "Unique username for user", example = "johndoe")
+    @Schema(description = "Unique username for user", example = "john")
     @NotBlank(message = "Username is required")
     private String username;
     @Schema(description = "Password to authenticate user", example = "weird^&password123")
