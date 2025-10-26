@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,10 +22,9 @@ public class DepartmentDTO {
     @NotBlank(message = "Department name is required")
     private String departmentName;
     @Schema(description = "Status of department", example = "active")
-    @NotBlank(message = "Username is required")
     private String status = "active";
     @Schema(description = "Creation date of department", example = "2025-10-25 21:45:13.123+00")
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
     @Schema(description = "Update date of department", example = "2025-10-25 21:45:13.123+00")
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 }

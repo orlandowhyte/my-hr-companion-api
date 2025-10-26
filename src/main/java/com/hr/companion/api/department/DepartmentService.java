@@ -14,16 +14,23 @@ public class DepartmentService {
     final private DepartmentRepository departmentRepository;
     final private DepartmentMapper departmentMapper;
 
+    /**
+     * Retrieves all departments from the database.
+     * @return List of Departments representing all departments.
+     */
     public List<DepartmentDTO> getAllDepartments() {
-        log.info("Fetching all departments from the database....");
         log.info("Returned {} departments", departmentRepository.count());
         return departmentMapper.toDtoList(departmentRepository.findAll());
     }
 
+    /**
+     * Creates a new department in the database.
+     * @param request DepartmentDTO containing details of the department to be created.
+     * @return DepartmentDTO representing the newly created department.
+     */
     public DepartmentDTO createDepartment(DepartmentDTO request) {
         log.info("Creating a new department with name: {}", request.getDepartmentName());
-        Department department = departmentMapper.toEntity(request);
-        Department savedDepartment = departmentRepository.save(department);
+        Department savedDepartment = departmentRepository.save(departmentMapper.toEntity(request));
         log.info("Department created with ID: {}", savedDepartment.getDepartmentId());
         return departmentMapper.toDto(savedDepartment);
     }

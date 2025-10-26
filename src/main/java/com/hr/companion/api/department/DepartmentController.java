@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/department")
 @AllArgsConstructor
-@Tag(name="Department Controller", description="Controller that handles department operations")
+@Tag(name="Department", description="Controller that handles department operations")
 public class DepartmentController {
     public final DepartmentService departmentService;
 
