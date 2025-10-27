@@ -76,9 +76,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(encodedPassword)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .status("active")
                 .roles(roles)
                 .enabled(true)
                 .build();

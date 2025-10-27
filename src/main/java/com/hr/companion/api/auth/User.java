@@ -2,11 +2,14 @@ package com.hr.companion.api.auth;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -36,11 +39,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean enabled = true;
     @Column(nullable = false)
-    private String status;
-    @Column(name="created_at")
-    private Instant createdAt;
-    @Column(name="updated_at")
-    private Instant updatedAt;
+    private String status = "active";
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "user_roles",
