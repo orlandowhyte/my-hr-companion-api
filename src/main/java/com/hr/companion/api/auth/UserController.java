@@ -61,21 +61,6 @@ public class UserController {
     public ResponseEntity<ApiSuccessResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest request) {
         User newUser = userDetailsService.registerUser(request);
         URI location = URI.create("/v1/api/auth/register/");
-//        var response = RegisterResponse.builder()
-//                .id(newUser.getId())
-//                .username(newUser.getUsername())
-//                .firstname(newUser.getFirstname())
-//                .lastname(newUser.getLastname())
-//                .email(newUser.getEmail())
-//                .enabled(newUser.isEnabled())
-//                .roles(newUser.getRoles())
-//                .createdAt(newUser.getCreatedAt())
-//                .updatedAt(newUser.getUpdatedAt())
-//                .status(newUser.getStatus())
-//                .accountNonLocked(newUser.isAccountNonLocked())
-//                .accountNonExpired(newUser.isAccountNonExpired())
-//                .credentialsNonExpired(newUser.isCredentialsNonExpired())
-//                .build();
         var response = userMapper.toDto(newUser);
         return ResponseEntity.created(location).body((ApiSuccessResponse.success(response,
                 "User created successfully", HttpStatus.CREATED.value())));

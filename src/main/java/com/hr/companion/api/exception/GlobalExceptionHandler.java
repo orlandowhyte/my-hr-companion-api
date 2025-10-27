@@ -153,6 +153,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleDepartmentNotFoundException(
+            DepartmentNotFoundException ex, HttpServletRequest request) {
+        log.error("Department not found: {}", ex.getMessage());
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                "Department not found",
+                null,
+                request
+        );
+    }
+
     private ResponseEntity<ApiErrorResponse> buildResponse(
             HttpStatus status, String message, List<String> details, HttpServletRequest request) {
 
