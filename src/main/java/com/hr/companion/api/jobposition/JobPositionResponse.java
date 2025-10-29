@@ -1,6 +1,5 @@
 package com.hr.companion.api.jobposition;
 
-import com.hr.companion.api.department.Department;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -15,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Data Transfer Object for Job Position entity")
-public class JobPositionDTO {
+@Schema(description = "Response Object for Job Position")
+public class JobPositionResponse {
     @Schema(description = "Unique Id for job description", example = "3663798d-6c20-4515-bfb3-9edaa50dfd88")
     private UUID jobPositionId;
     @Schema(description = "Foreign key Id for department", example = "4423798d-6c20-4515-bfb3-9edaa50dfd88")
