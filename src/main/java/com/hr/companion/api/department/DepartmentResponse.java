@@ -14,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Data Transfer Object for Department entity")
-public class DepartmentDTO {
+@Schema(description = "Response Object for Department")
+public class DepartmentResponse {
     @Schema(description = "Unique Id for department", example = "3663798d-6c20-4515-bfb3-9edaa50dfd88")
     private UUID departmentId;
     @Schema(description = "Department name", example = "Technology")

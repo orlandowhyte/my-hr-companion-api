@@ -2,9 +2,9 @@ package com.hr.companion.api.util;
 
 import java.util.List;
 
-public interface BaseMapper<E, D> {
-    D toDto(E entity);
-    E toEntity(D dto);
-    List<D> toDtoList(List<E> entities);
-    List<E> toEntityList(List<D> dtos);
+public interface BaseMapper<Entity, Request, Response> {
+    Response toResponse(Entity entity);
+    Entity toEntity(Request request);
+    List<Response> toResponseList(List<Entity> entities);
+    List<Entity> toEntityList(List<Request> requests);
 }

@@ -23,6 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * @param username The username of the user to authenticate.
      * @return A JWT token if authentication is successful.
      */
-    public String authenticateUser(String username, HttpServletResponse res) {
+    public LoginResponse authenticateUser(String username, HttpServletResponse res) {
         log.info("Authenticating user: {}", username);
         var user = loadUserByUsername(username);
         var accessToken = jwtService.generateAccessToken(user.getUsername(), user.getAuthorities());
@@ -51,36 +52,27 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
         res.addHeader("Set-Cookie", cookie.toString());
         log.info("User: {} Authenticated successfully with token: {}", username, accessToken);
-        return accessToken;
+        return new LoginResponse(accessToken);
     }
 
 
     /**
      * Registers a new user in the system.
-     * @param request request containing user details to be saved.
-     * @return The registered user entity.
+     * @param request RegisterRequest containing user details to be saved.
+     * @return The registered user response.
      */
-    public User registerUser(RegisterRequest request) {
+    public RegisterResponse registerUser(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             log.error("Account already exists with username: {}", request.getUsername());
             throw new UserAlreadyExistsException("Username already taken: " + request.getUsername());
         }
-        // Hash password
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        // Default role
-        Set<String> roles = Set.of("USER");
-        // Create user
-        User newUser = User.builder()
-                .username(request.getUsername())
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(encodedPassword)
-                .roles(roles)
-                .enabled(true)
-                .build();
+        Set<String> roles = Set.of(request.getRole());
+        User newUser = userMapper.toEntity(request);
+        newUser.setPassword(encodedPassword);
+        newUser.setRoles(roles);
         userRepository.save(newUser);
         log.info("User: {} created successfully", request.getUsername());
-        return newUser;
+        return userMapper.toResponse(newUser);
     }
 }

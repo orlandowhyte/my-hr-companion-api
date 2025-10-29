@@ -29,7 +29,6 @@ import java.net.URI;
 public class UserController {
     private final CustomUserDetailsService userDetailsService;
     private final AuthenticationManager authManager;
-    private final UserMapper userMapper;
 
     @PostMapping("login")
     @Operation(summary = "Login for users", description = "Authenticates user and returns JWT token")
@@ -44,8 +43,8 @@ public class UserController {
     })
     public ResponseEntity<ApiSuccessResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletResponse res) {
         authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        String accessToken = userDetailsService.authenticateUser(request.getUsername(), res);
-        return ResponseEntity.ok((ApiSuccessResponse.success(new LoginResponse(accessToken),
+        LoginResponse response = userDetailsService.authenticateUser(request.getUsername(), res);
+        return ResponseEntity.ok((ApiSuccessResponse.success(response,
                 "User successfully authenticated", HttpStatus.OK.value())));
     }
 
@@ -59,9 +58,8 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     public ResponseEntity<ApiSuccessResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest request) {
-        User newUser = userDetailsService.registerUser(request);
+        RegisterResponse response = userDetailsService.registerUser(request);
         URI location = URI.create("/v1/api/auth/register/");
-        var response = userMapper.toDto(newUser);
         return ResponseEntity.created(location).body((ApiSuccessResponse.success(response,
                 "User created successfully", HttpStatus.CREATED.value())));
     }

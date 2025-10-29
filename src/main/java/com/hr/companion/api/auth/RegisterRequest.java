@@ -32,4 +32,7 @@ public class RegisterRequest {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
+    @Schema(description = "Role of the new user", example = "ADMIN")
+    @NotBlank(message = "Role is required")
+    private String role;
 }

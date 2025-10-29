@@ -31,21 +31,21 @@ public class DepartmentController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Departments retrieved successfully"),
     })
-    public ResponseEntity<ApiSuccessResponse<List<DepartmentDTO>>> getAllDepartments() {
-        List<DepartmentDTO> departments = departmentService.getAllDepartments();
+    public ResponseEntity<ApiSuccessResponse<List<DepartmentResponse>>> getAllDepartments() {
+        List<DepartmentResponse> departments = departmentService.getAllDepartments();
         return ResponseEntity.ok((ApiSuccessResponse.success(departments,
                 "List of departments returned successfully", HttpStatus.OK.value())));
     }
 
     @PostMapping
-    @Operation(summary = "Create a new department", description = "Authenticates user and returns JWT token")
+    @Operation(summary = "Create a new department", description = "Creates a new department with the provided details")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Department created successfully"),
     })
-    public ResponseEntity<ApiSuccessResponse<DepartmentDTO>> createDepartment(
-            @Valid @RequestBody DepartmentDTO request) {
+    public ResponseEntity<ApiSuccessResponse<DepartmentResponse>> createDepartment(
+            @Valid @RequestBody DepartmentRequest request) {
         URI location = URI.create("/v1/api/department");
-        DepartmentDTO createdDepartment =  departmentService.createDepartment(request);
+        DepartmentResponse createdDepartment =  departmentService.createDepartment(request);
         return ResponseEntity.created(location).body((ApiSuccessResponse.success(createdDepartment,
                 "Department created successfully", HttpStatus.CREATED.value())));
     }
@@ -57,9 +57,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "404", description = "Department not found",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
     })
-    public ResponseEntity<ApiSuccessResponse<DepartmentDTO>> getDepartmentById(
+    public ResponseEntity<ApiSuccessResponse<DepartmentResponse>> getDepartmentById(
             @PathVariable("departmentId") String departmentId) {
-        DepartmentDTO department = departmentService.getDepartmentById(UUID.fromString(departmentId));
+        DepartmentResponse department = departmentService.getDepartmentById(UUID.fromString(departmentId));
         return ResponseEntity.ok((ApiSuccessResponse.success(department,
                 "Department returned successfully", HttpStatus.OK.value())));
     }
@@ -71,9 +71,9 @@ public class DepartmentController {
             @ApiResponse(responseCode = "404", description = "Department not found",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
     })
-    public ResponseEntity<ApiSuccessResponse<DepartmentDTO>> getDepartmentByName(
+    public ResponseEntity<ApiSuccessResponse<DepartmentResponse>> getDepartmentByName(
             @Param("departmentName") String departmentName) {
-        DepartmentDTO department = departmentService.getDepartmentByName(departmentName);
+        DepartmentResponse department = departmentService.getDepartmentByName(departmentName);
         return ResponseEntity.ok((ApiSuccessResponse.success(department,
                 "Department returned successfully", HttpStatus.OK.value())));
     }

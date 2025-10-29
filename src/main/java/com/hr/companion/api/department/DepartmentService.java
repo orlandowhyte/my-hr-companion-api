@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,44 +19,44 @@ public class DepartmentService {
      * Retrieves all departments from the database.
      * @return List of Departments representing all departments.
      */
-    public List<DepartmentDTO> getAllDepartments() {
+    public List<DepartmentResponse> getAllDepartments() {
         log.info("Returned {} departments", departmentRepository.count());
-        return departmentMapper.toDtoList(departmentRepository.findAll());
+        return departmentMapper.toResponseList(departmentRepository.findAll());
     }
 
     /**
      * Creates a new department in the database.
-     * @param request DepartmentDTO containing details of the department to be created.
-     * @return DepartmentDTO representing the newly created department.
+     * @param request DepartmentRequest containing details of the department to be created.
+     * @return DepartmentResponse representing the newly created department.
      */
-    public DepartmentDTO createDepartment(DepartmentDTO request) {
+    public DepartmentResponse createDepartment(DepartmentRequest request) {
         log.info("Creating a new department with name: {}", request.getDepartmentName());
         Department savedDepartment = departmentRepository.save(departmentMapper.toEntity(request));
         log.info("Department created with ID: {}", savedDepartment.getDepartmentId());
-        return departmentMapper.toDto(savedDepartment);
+        return departmentMapper.toResponse(savedDepartment);
     }
 
     /**
      * Retrieves a department by its ID.
      * @param departmentId UUID representing the unique identifier of the department.
-     * @return DepartmentDTO representing the department with the specified ID.
+     * @return DepartmentResponse representing the department with the specified ID.
      * @throws DepartmentNotFoundException if the department is not found.
      */
-    public DepartmentDTO getDepartmentById(UUID departmentId) {
+    public DepartmentResponse getDepartmentById(UUID departmentId) {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new DepartmentNotFoundException("Department not found with ID: " + departmentId));
-        return departmentMapper.toDto(department);
+        return departmentMapper.toResponse(department);
     }
 
     /**
      * Retrieves a department by its name.
      * @param departmentName String representing the name of the department.
-     * @return DepartmentDTO representing the department with the specified name.
+     * @return DepartmentResponse representing the department with the specified name.
      * @throws DepartmentNotFoundException if the department is not found.
      */
-    public DepartmentDTO getDepartmentByName(String departmentName) {
+    public DepartmentResponse getDepartmentByName(String departmentName) {
         Department department = departmentRepository.findByDepartmentName(departmentName)
                 .orElseThrow(() -> new DepartmentNotFoundException("Department not found with name: " + departmentName));
-        return departmentMapper.toDto(department);
+        return departmentMapper.toResponse(department);
     }
 }
