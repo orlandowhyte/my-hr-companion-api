@@ -19,7 +19,6 @@ public class DepartmentResponse {
     @Schema(description = "Unique Id for department", example = "3663798d-6c20-4515-bfb3-9edaa50dfd88")
     private UUID departmentId;
     @Schema(description = "Department name", example = "Technology")
-    @NotBlank(message = "Department name is required")
     private String departmentName;
     @Schema(description = "Status of department", example = "active")
     private String status = "active";

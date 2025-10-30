@@ -165,6 +165,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleEmployeeNotFoundException(
+            EmployeeNotFoundException ex, HttpServletRequest request) {
+        log.error("Employee not found: {}", ex.getMessage());
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                "Employee not found",
+                null,
+                request
+        );
+    }
+
     private ResponseEntity<ApiErrorResponse> buildResponse(
             HttpStatus status, String message, List<String> details, HttpServletRequest request) {
 
