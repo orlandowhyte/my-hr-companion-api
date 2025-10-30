@@ -31,9 +31,9 @@ public class EmployeeService {
      * @return EmployeeResponse representing the newly created employee.
      */
     public EmployeeResponse createEmployee(EmployeeRequest request) {
-        log.info("Creating a new employee with id: {}", request.getId());
+        log.info("Creating employee: {}", request.getFirstName());
         Employee savedEmployee = employeeRepository.save(employeeMapper.toEntity(request));
-        log.info("Employee created with ID: {}", savedEmployee.getId());
+        log.info("Employee created with ID: {}", savedEmployee.getEmployeeId());
         return employeeMapper.toResponse(savedEmployee);
     }
 

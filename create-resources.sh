@@ -214,7 +214,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vi/api/${lname}")
+@RequestMapping("/v1/api/${lname}")
 @AllArgsConstructor
 @Tag(name="${NAME}", description="Controller that handles ${lname} operations")
 public class ${NAME}Controller {

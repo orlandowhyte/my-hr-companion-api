@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vi/api/employee")
+@RequestMapping("/v1/api/employee")
 @AllArgsConstructor
 @Tag(name="Employee", description="Controller that handles employee operations")
 public class EmployeeController {
