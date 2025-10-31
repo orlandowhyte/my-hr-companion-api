@@ -177,6 +177,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmergencyContactNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleEmergencyContactNotFoundException(
+            EmergencyContactNotFoundException ex, HttpServletRequest request) {
+        log.error("Emergency contact not found: {}", ex.getMessage());
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                "Emergency contact not found",
+                null,
+                request
+        );
+    }
+
     private ResponseEntity<ApiErrorResponse> buildResponse(
             HttpStatus status, String message, List<String> details, HttpServletRequest request) {
 
