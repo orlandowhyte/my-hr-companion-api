@@ -35,7 +35,6 @@ public class EmergencyContactRequest {
     @Email(message = "Email should be valid")
     private String emailAddress;
     @Schema(description = "Is this the primary contact?", example = "true")
-    @NotBlank(message = "Primary contact status is required")
     private boolean isPrimary;
     private String status = "active";
 }
