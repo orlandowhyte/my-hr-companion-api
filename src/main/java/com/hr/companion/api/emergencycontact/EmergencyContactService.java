@@ -31,9 +31,9 @@ public class EmergencyContactService {
      * @return EmergencyContactResponse representing the newly created emergencyContact.
      */
     public EmergencyContactResponse createEmergencyContact(EmergencyContactRequest request) {
-        log.info("Creating a new emergency contact with id: {}", request.getId());
+        log.info("Creating a new emergency contact with id");
         EmergencyContact savedEmergencyContact = emergencyContactRepository.save(emergencyContactMapper.toEntity(request));
-        log.info("Emergency contact created with ID: {}", savedEmergencyContact.getId());
+        log.info("Emergency contact created with ID: {}", savedEmergencyContact.getContactId());
         return emergencyContactMapper.toResponse(savedEmergencyContact);
     }
 
