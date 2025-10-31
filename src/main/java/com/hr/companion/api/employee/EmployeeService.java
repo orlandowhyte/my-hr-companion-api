@@ -1,5 +1,8 @@
 package com.hr.companion.api.employee;
 
+import com.hr.companion.api.auth.CustomUserDetailsService;
+import com.hr.companion.api.auth.RegisterRequest;
+import com.hr.companion.api.auth.RegisterResponse;
 import com.hr.companion.api.exception.EmployeeNotFoundException;
 import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
@@ -14,7 +17,7 @@ import java.util.UUID;
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
-
+    private final CustomUserDetailsService userService;
 
     /**
      * Retrieves all employees from the database.
@@ -34,6 +37,20 @@ public class EmployeeService {
         log.info("Creating employee: {}", request.getFirstName());
         Employee savedEmployee = employeeRepository.save(employeeMapper.toEntity(request));
         log.info("Employee created with ID: {}", savedEmployee.getEmployeeId());
+
+        //Register user for the employee
+        log.info("Creating user for employee with ID: {}", savedEmployee.getEmployeeId());
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .username(request.getEmailAddress())
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
+                .password("defaultPassword123")
+                .email(request.getEmailAddress())
+                .role("USER")
+                .build();
+
+        RegisterResponse registerResponse = userService.registerUser(registerRequest);
+        log.info("User created for employee ID: {} with username: {}", savedEmployee.getEmployeeId(), registerRequest.getUsername());
         return employeeMapper.toResponse(savedEmployee);
     }
 
