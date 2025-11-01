@@ -63,7 +63,7 @@ public class EmergencyContactController {
                 "Emergency contact returned successfully", HttpStatus.OK.value())));
     }
 
-    @GetMapping("employee/{employeeId}/emergency-contact}")
+    @GetMapping("employee/{employeeId}/emergency-contact")
     @Operation(summary = "Return emergency contacts by Employee Id",
             description = "Finds and returns emergency contacts by Employee Id")
     @ApiResponses({
