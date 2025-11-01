@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -62,5 +59,25 @@ public class UserController {
         URI location = URI.create("/v1/api/auth/register/");
         return ResponseEntity.created(location).body((ApiSuccessResponse.success(response,
                 "User created successfully", HttpStatus.CREATED.value())));
+    }
+
+    @PostMapping("refresh")
+    public ResponseEntity<ApiSuccessResponse<LoginResponse>> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+        LoginResponse response = userDetailsService.refreshAccessToken(refreshToken);
+        if(response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiSuccessResponse.success(null,
+                            "Invalid or expired refresh token", HttpStatus.UNAUTHORIZED.value()));
+        }
+
+        return ResponseEntity.ok((ApiSuccessResponse.success(response,
+                "Access token refreshed successfully", HttpStatus.OK.value())));
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<ApiSuccessResponse<LoginResponse>> logout(HttpServletResponse res) {
+        LoginResponse response = userDetailsService.logoutUser(res);
+        return ResponseEntity.ok((ApiSuccessResponse.success(response,
+                "User logged out successfully", HttpStatus.OK.value())));
     }
 }

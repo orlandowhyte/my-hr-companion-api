@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.security.Key;
 import java.util.Collection;
@@ -29,9 +30,9 @@ public class JwtService {
     }
 
     // Generate Access Token with roles
-    public String generateAccessToken(String username, Collection<? extends org.springframework.security.core.GrantedAuthority> authorities) {
+    public String generateAccessToken(String username, Collection<? extends GrantedAuthority> authorities) {
         var roles = authorities.stream()
-                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                .map(GrantedAuthority::getAuthority)
                 .toList();
 
         return Jwts.builder()

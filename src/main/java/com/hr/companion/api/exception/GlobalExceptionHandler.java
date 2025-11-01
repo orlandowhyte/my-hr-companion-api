@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleDisabledUser(DisabledException ex, HttpServletRequest request) {
         log.error("Authentication failed: user account is disabled");
         return buildResponse(
-                HttpStatus.FORBIDDEN,
+                HttpStatus.UNAUTHORIZED,
                 "User account is disabled",
                 null,
                 request
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleLockedUser(LockedException ex, HttpServletRequest request) {
         log.error("Authentication failed: user account is locked");
         return buildResponse(
-                HttpStatus.FORBIDDEN,
+                HttpStatus.UNAUTHORIZED,
                 "User account is locked",
                 null,
                 request
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
             AccountExpiredException ex, HttpServletRequest request) {
         log.error("Authentication failed: account expired");
         return buildResponse(
-                HttpStatus.FORBIDDEN,
+                HttpStatus.UNAUTHORIZED,
                 "User account has expired",
                 null,
                 request
@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
             CredentialsExpiredException ex, HttpServletRequest request) {
         log.error("Authentication failed: credentials expired");
         return buildResponse(
-                HttpStatus.FORBIDDEN,
+                HttpStatus.UNAUTHORIZED,
                 "User credentials have expired",
                 null,
                 request
@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
         log.error("Authentication service error: {}", ex.getMessage());
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Internal authentication service error",
+                "Internal authentication service error. Please try again later.",
                 null,
                 request
         );
@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
         log.error("Authentication failed: {}", ex.getMessage());
         return buildResponse(
                 HttpStatus.UNAUTHORIZED,
-                "Authentication failed",
+                "Authentication failed. Please check your credentials.",
                 null,
                 request
         );
@@ -123,7 +123,7 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error occurred", ex);
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred",
+                "An unexpected error occurred. Please try again later.",
                 null,
                 request
         );
@@ -147,7 +147,7 @@ public class GlobalExceptionHandler {
         log.error("There was a data integrity violation: {}", ex.getMessage());
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
+                "Data integrity violation. Possible duplicate or invalid data.",
                 null,
                 request
         );

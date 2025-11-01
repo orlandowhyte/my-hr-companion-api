@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -75,4 +76,40 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("User: {} created successfully", request.getUsername());
         return userMapper.toResponse(newUser);
     }
+
+    /**
+     * Refreshes the access token using the provided refresh token.
+     * @param refreshToken The refresh token to validate and use for generating a new access token.
+     * @return A new LoginResponse containing the new access token, or null if the refresh token is invalid.
+     */
+    public LoginResponse refreshAccessToken(String refreshToken) {
+        log.info("Refreshing access token using refresh token");
+        if (refreshToken == null || !jwtService.isValid(refreshToken)) {
+            log.error("Invalid refresh token provided");
+            return new LoginResponse(null);
+        }
+
+        String username = jwtService.extractUsername(refreshToken);
+        var user = loadUserByUsername(username);
+        log.info("Access token refreshed successfully for user: {}", username);
+        var newAccessToken = jwtService.generateAccessToken(username,
+                user.getAuthorities());
+        return new LoginResponse(newAccessToken);
+    }
+
+    /**
+     * Logs out the user by clearing the refresh token cookie.
+     * @param res HttpServletResponse to add the cleared cookie.
+     * @return A LoginResponse with null token indicating successful logout.
+     */
+    public LoginResponse logoutUser(HttpServletResponse res) {
+        log.info("Logging out user");
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true).secure(true).sameSite("Strict")
+                .path("/").maxAge(0).build();
+        res.addHeader("Set-Cookie", cookie.toString());
+        log.info("User logged out successfully");
+        return new LoginResponse(null);
+    }
+
 }
