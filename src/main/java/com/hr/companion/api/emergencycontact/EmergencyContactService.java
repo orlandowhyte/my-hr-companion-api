@@ -48,4 +48,16 @@ public class EmergencyContactService {
                 .orElseThrow(() -> new EmergencyContactNotFoundException("EmergencyContact not found with ID: " + emergencyContactId));
         return emergencyContactMapper.toResponse(emergencyContact);
     }
+
+    /**
+     * Retrieves emergency contacts by employee ID.
+     * @param employeeId UUID representing the unique identifier of the employee.
+     * @return List of EmergencyContactResponse associated with the specified employee ID.
+     */
+    public List<EmergencyContactResponse> getEmergencyContactsByEmployeeId(UUID employeeId) {
+        log.info("Fetching emergency contacts for employee ID: {}", employeeId);
+        List<EmergencyContact> emergencyContacts = emergencyContactRepository.findByEmployeeId(employeeId);
+        log.info("Returned {} emergency contacts for employee ID: {}", emergencyContacts.size(), employeeId);
+        return emergencyContactMapper.toResponseList(emergencyContacts);
+    }
 }

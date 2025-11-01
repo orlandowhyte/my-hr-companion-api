@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/api/emergency-contact")
+@RequestMapping("/v1/api")
 @AllArgsConstructor
 @Tag(name="Emergency Contact", description="Controller that handles emergency contact operations")
 public class EmergencyContactController {
     private final EmergencyContactService emergencyContactService;
 
-    @GetMapping
+    @GetMapping("/emergency-contact")
     @Operation(summary = "Return all emergency contacts", description = "Returns a list of all emergency contacts")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Emergency contacts retrieved successfully"),
@@ -36,7 +36,7 @@ public class EmergencyContactController {
                 "List of emergency contacts returned successfully", HttpStatus.OK.value())));
     }
 
-    @PostMapping
+    @PostMapping("/emergency-contact")
     @Operation(summary = "Create a new emergency contact", description = "Creates a new emergency contact with the provided details")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Emergency contact created successfully"),
@@ -49,7 +49,7 @@ public class EmergencyContactController {
                 "Emergency contact created successfully", HttpStatus.CREATED.value())));
     }
 
-    @GetMapping("/{emergencyContactId}")
+    @GetMapping("/emergency-contact/{emergencyContactId}")
     @Operation(summary = "Return emergency contact by Id", description = "Finds and returns emergency contact by Id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Emergency contact found successfully"),
@@ -61,5 +61,19 @@ public class EmergencyContactController {
         EmergencyContactResponse emergencyContact = emergencyContactService.getEmergencyContactById(UUID.fromString(emergencyContactId));
         return ResponseEntity.ok((ApiSuccessResponse.success(emergencyContact,
                 "Emergency contact returned successfully", HttpStatus.OK.value())));
+    }
+
+    @GetMapping("employee/{employeeId}/emergency-contact}")
+    @Operation(summary = "Return emergency contacts by Employee Id",
+            description = "Finds and returns emergency contacts by Employee Id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Emergency contacts found successfully"),
+    })
+    public ResponseEntity<ApiSuccessResponse<List<EmergencyContactResponse>>> getEmergencyContactsByEmployeeId(
+            @PathVariable("employeeId") String employeeId) {
+        List<EmergencyContactResponse> emergencyContacts =
+                emergencyContactService.getEmergencyContactsByEmployeeId(UUID.fromString(employeeId));
+        return ResponseEntity.ok((ApiSuccessResponse.success(emergencyContacts,
+                "List of emergency contacts returned successfully", HttpStatus.OK.value())));
     }
 }
